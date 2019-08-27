@@ -1,6 +1,6 @@
-# Guzzler Official Documentation
+# Hybrid Official Documentation
 
-All commits made to this project on `master` are automatically built and deployed to https://guzzler.dev.
+All commits made to this project on `master` are automatically built and deployed to https://hybrid.guzzler.dev.
 
 This project is built using [Vuepress](https://vuepress.vuejs.org/). The text for each page is located in the docs directory, and all configuration is in the docs/.vuepress directory.
 

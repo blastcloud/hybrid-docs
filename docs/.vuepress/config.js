@@ -12,7 +12,7 @@ module.exports = {
         ['link', {rel: 'apple-touch-icon', sizes: '500x500', href:'https://guzzler.dev/img/500x500.png'}]
     ],
     themeConfig: {
-        logo: '/img/guzzler-logo.svg',
+        logo: '/img/hybrid-logo.svg',
         nav: [
             { text: 'Home', link: '/'},
             { text: 'Why', link: '/why/'}
