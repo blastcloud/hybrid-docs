@@ -77,22 +77,22 @@ By default, this method simply checks that the specified body exists somewhere i
 
 ### withCallback(Closure $callback, string $message = null)
 
-You can pass a custom, anonymous method to do ad hoc, on-the-fly, determining if a history item fits your conditions. Your closure should expect a HttpClient history array, and return `true` or `false` on whether or not the history item passes your test. A HttpClient history item is an array with the following structure:
+You can pass a custom, anonymous method to do ad hoc, on-the-fly, determining if a history item fits your conditions. Your closure should expect a history array, and return `true` or `false` on whether or not the history item passes your test. A history item is an array with the following structure:
 
 ```php
-// HttpClient history item structure
+// Hybrid history item structure
 [
-    "request"  => HttpClientHttp\Psr7\Request   object
-    "response" => HttpClientHttp\Psr7\Response  object,
+    "request"  => array,
+    "response" => Symfony\Component\HttpClient\Response\MockResponse object,
     "options"  => array,
-    "errors"   => array
+    "error"   => null|string 
 ]
 ```
 
 ```php
 $this->hybrid->expects($this->once())
     ->withCallback(function ($history) {
-        return isset($history['options']['cookies']);
+        return isset($history['request']['request_headers']['some-header']);
     });
 ```
 
@@ -102,7 +102,7 @@ By default, the error message for a callback is simply "Custom callback: \Closur
 
 ### withFile(string $fieldName, File $file)
 
-You can make a set of expectations about a specific file that is included in a request. To do so, specify the field that the file should be under, and include an instance of the `BlastCloud\Hybrid\Helpers\File` class. The `File` class allows you to specify the following attributes of a file that is uploaded via a multipart form:
+You can make a set of expectations about a specific file that is included in a request. To do so, specify the field that the file should be under, and include an instance of the `BlastCloud\Chassis\Helpers\File` class. The `File` class allows you to specify the following attributes of a file that is uploaded via a multipart form:
 
 | Attribute | Description |
 |-----------|-------------|
@@ -119,7 +119,12 @@ There are several ways you can build out the attributes on a `File` object.
 use BlastCloud\Hybrid\Helpers\File;
 
 // Specify attributes on instantiation.
-$file = new File($contents = null, string $filename = null, string $contentType = null, array $headers = null);
+$file = new File(
+    $contents = null, 
+    string $filename = null, 
+    string $contentType = null, 
+    array $headers = null
+);
 
 // Pass an associative array to a factory.
 $file = File::create([
@@ -163,7 +168,7 @@ By default, this method simply checks that the specified files exist somewhere i
 
 ### withForm(array $formFields, bool $exclusive = false)
 
-You can expect a specific set of form fields in the body of a post. As of `1.2.1`, this method works with both URL encoded and multipart forms. 
+You can expect a specific set of form fields in the body of a post. This method works with both URL encoded and multipart forms. 
 
 ```php
 $this->hybrid->expects($this->once())
@@ -177,7 +182,7 @@ By default, this method simply checks that all specified fields and values exist
 
 ### withFormField(string $key, $value)
 
-You can expect a specific form field in the body of a post. As of `1.2.1`, this method works with both URL encoded and multipart forms.
+You can expect a specific form field in the body of a post. This method works with both URL encoded and multipart forms.
 
 ```php
 $this->hybrid->expects($this->once())
@@ -254,7 +259,7 @@ $this->hybrid->expects($this->once())
     ->withJson(['second' => 'second value']);
 ```
 
-By default, this method checks only that the passed array of values exists somewhere in the request body. To make an exclusive comparison so that only the data passed exists on the request body, a boolean `true` can be passed as the second argument.
+By default, this method checks only that the passed array of values exists somewhere in the request body. To make an exclusive comparison so that only the data passed exists on the request body, a boolean `true` can be given as the second argument.
 
 ### withOption(string $name, string $value)
 
@@ -262,15 +267,7 @@ You can expect a certain HttpClient Client/Request option by passing a name and 
 
 ```php
 $this->hybrid->expects($this->once())
-    ->withOption('stream', true);
-```
-
-You can chain together multiple calls to `withOption` to individually add more option values.
-
-```php
-$this->hybrid->expects($this->once())
-    ->withOption('stream', true)
-    ->withOption('allow_redirects', false);
+    ->withOption('base_uri', 'http://somewhere.com');
 ```
 
 ### withOptions(array $options)
@@ -280,8 +277,8 @@ As a shorthand for multiple `withOption()` calls, you can pass an array of optio
 ```php
 $this->hybrid->expects($this->once())
     ->withOptions([
-        'stream' => true,
-        'allow_redirects' => false
+        'auth_basic' => ['the-username'],
+        // ... something else
     ]);
 ```
 

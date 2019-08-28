@@ -1,21 +1,21 @@
 ---
 lang: en-US
-title: Extending | Guzzler
+title: Extending | Hybrid
 ---
 
-# Extending Guzzler
+# Extending Hybrid
 
-Though Guzzler tries to be as helpful as possible, there may be times when you want to extend the provided capabilities for your own needs. You can do so with custom [filters](#custom-filters) and [macros](#custom-macros). 
+Though Hybrid tries to be as helpful as possible, there may be times when you want to extend the provided capabilities for your own needs. You can do so with custom [filters](#custom-filters) and [macros](#custom-macros). 
 
 ## Custom Filters
 
 Filters are used by the `Expectation` class to eliminate history items that do not match the defined arguments. Each filter is executed by calling it on an `Expectation` instance.
 
 ```php
-$this->guzzler->expects($this->once())
+$this->hybrid->expects($this->once())
     ->withFilterMethod($argument, $another);
     
-$this->guzzler->assertAll(function ($e) use ($argument, $another) {
+$this->hybrid->assertAll(function ($e) use ($argument, $another) {
     return $e->withFilterMethod($argument, $another);
 });
 ```
@@ -36,10 +36,10 @@ To accomplish this, we can first build out a class like the following:
 ```php
 <?php
 
-namespace tests\GuzzlerFilters;
+namespace tests\HybridFilters;
 
-use BlastCloud\Guzzler\Filters\Base;
-use BlastCloud\Guzzler\Interfaces\With;
+use BlastCloud\Hybrid\Filters\Base;
+use BlastCloud\Hybrid\Interfaces\With;
 
 class WithUser extends Base Implements With
 {
@@ -53,7 +53,7 @@ class WithUser extends Base Implements With
     public function __invoke(array $history): array
     {
         return array_filter($history, function ($item) {
-            $body = json_decode($item['request']->getBody(), true);
+            $body = json_decode($item['request']['body'], true);
             
             return in_array($body['user']['id'], $this->userIds);
         });
@@ -88,63 +88,63 @@ The following naming convention is followed for filter classes.
 
 ### Adding a Namespace
 
-To use your filters in Guzzler, you must provide the namespace to look through to find your class. There are two ways to do this:
+To use your filters in Hybrid, you must provide the namespace to look through to find your class. There are two ways to do this:
 
 1. Inline before it is needed with the static `Expectation::addNamespace` method.
-1. Globally with the PHPUnit extension that Guzzler provides.
+1. Globally with the PHPUnit extension that Hybrid provides.
 
 #### Adding a Namespace Inline
 
 ```php
 <?php
 
-use BlastCloud\Guzzler\UsesGuzzler;
-use BlastCloud\Guzzler\Expectation;
+use BlastCloud\Hybrid\UsesHybrid;
+use BlastCloud\Hybrid\Expectation;
 
 class SomethingTest extends TestCase
 {
-    use UsesGuzzler;
+    use UsesHybrid;
     
     public function setUp: void
     {
         parent::setUp();
         
-        $this->client = $this->guzzler->getClient();
-        Expectation::addNamespace("tests\\GuzzlerFilters");
+        $this->client = $this->hybrid->getClient();
+        Expectation::addNamespace("tests\\HybridFilters");
     }
     
     public function testSomething()
     {
-        $this->guzzler->expects($this->once())
+        $this->hybrid->expects($this->once())
             ->withUserIn([4, 85, 199]);
     }
 }
 ```
 
 ::: tip Be Aware
-Any namespaces you add to the `Expectation` class will be checked **before** the provided filters. So, if you name your filter the same as one provided by Guzzler, it will override the Guzzler default. This is exactly what you should do, if you want to override the provided filter.
+Any namespaces you add to the `Expectation` class will be checked **before** the provided filters. So, if you name your filter the same as one provided by Hybrid, it will override the Hybrid default. This is exactly what you should do, if you want to override the provided filter.
 :::
 
 #### Adding a Namepsace Globally
 
-You can ensure your filters are available throughout all your tests by adding the Guzzler PHPUnit extension to your `phpunit.xml` file.
+You can ensure your filters are available throughout all your tests by adding the Hybrid PHPUnit extension to your `phpunit.xml` file.
 
 ```xml
 <phpunit>
     <!-- ... any other configs -->
     <extensions>
-        <extension class="BlastCloud\Guzzler\Helpers\Extension" />
+        <extension class="BlastCloud\Hybrid\Helpers\Extension" />
     </extensions>
     <php>
-        <var name="GuzzlerFilterNamespace" value="tests\GuzzlerFilters" />
+        <var name="HybridFilterNamespace" value="tests\HybridFilters" />
     </php>
 </phpunit>
 ```
 
 There are two parts to adding a namespace globally:
 
-1. The `BlastCloud\Guzzler\Helpers\Extension` extension must be added to an `extensions` object.
-1. A `php` object variable with the name `GuzzlerFilterNamespace`.
+1. The `BlastCloud\Hybrid\Helpers\Extension` extension must be added to an `extensions` object.
+1. A `php` object variable with the name `HybridFilterNamespace`.
 
 ::: tip Be Aware
 If you add a namespace via the extension, slashes should not be escaped.
@@ -152,20 +152,20 @@ If you add a namespace via the extension, slashes should not be escaped.
 
 ## Custom Macros
 
-Macros allow you to create convenience methods like ,`synchronous` or `post`, that internally create `Expectation` conditions. For example, the following are the internal implementations of `synchronous` and `asynchronous`.
+Macros allow you to create convenience methods like ,`synchronous` or `post`, that internally create `Expectation` conditions. For example, the following are the internal implementations of `get` and `post`.
 
 ```php
-Expectation::macro("synchronous", function (Expectation $e) {   
-    return $e->withOption("synchronous", true);
+Expectation::macro("get", function (Expectation $e, $url) {   
+    return $e->withEndpoint($url, "GET");
 });
 
-Expectation::macro("asynchronous", function (Expectation $e) {
-    return $e->withOption("synchronous", null);
+Expectation::macro("post", function (Expectation $e, $url) {
+    return $e->withEndpoint($url, "POST");
 });
 ```
 
 ::: tip Be Aware
-If you create a macro with the same name as one provided by Guzzler, your implementation will override the default. That is exactly what you should do, if overriding is your goal.
+If you create a macro with the same name as one provided by Hybrid, your implementation will override the default. That is exactly what you should do, if overriding is your goal.
 :::
 
 ### Use Case
@@ -195,13 +195,13 @@ Expectation::macro("paginate", function (Expectation $e, $url, $show, $page) {
 Now, you can use the `paginate` method on any `Expectation` instance, and it will still be chainable like all other methods on the class.
 
 ```php
-$this->guzzler->expects($this->once())
+$this->hybrid->expects($this->once())
     ->paginate("/api/v2/customers", 50, 3)
     ->withOption("stream", true);
 
 // or
 
-$this->guzzler->expects($this->once())
+$this->hybrid->expects($this->once())
     ->paginate("/api/v2/reports", 75, 2);
 ```
 
@@ -224,7 +224,7 @@ Expectation::macro("someName", function ($expect, $argument = false) {
 You can register macros in two ways:
 
 1. Inline anywhere before you need it with the static `Expectation::macro` method.
-1. Globally with the PHPUnit extension that Guzzler provides. 
+1. Globally with the PHPUnit extension that Hybrid provides. 
 
 #### Registering Macros Inline
 
@@ -237,31 +237,31 @@ Expectation::macro("vendorSetup", function (Expectation $e, $token) {
 });
 
 // You can then use the vendorSetup method as needed.
-$this->guzzler->expects($this->any())
+$this->hybrid->expects($this->any())
     ->vendorSetup($someAuthToken)
     ->get("/some-endpoint");
 ```
 
 #### Registering Macros Globally
 
-You can ensure your macros are available throughout all your tests by adding the Guzzler PHPUnit extension to your `phpunit.xml` file.
+You can ensure your macros are available throughout all your tests by adding the Hybrid PHPUnit extension to your `phpunit.xml` file.
 
 ```xml
 <phpunit>
     <!-- ... any other configs -->
     <extensions>
-        <extension class="BlastCloud\Guzzler\Helpers\Extension" />
+        <extension class="BlastCloud\Hybrid\Helpers\Extension" />
     </extensions>
     <php>
-        <var name="GuzzlerMacroFile" value="tests/testFiles/macros.php" />
+        <var name="HybridMacroFile" value="tests/testFiles/macros.php" />
     </php>
 </phpunit>
 ```
 
 There are two parts to adding a namespace globally:
 
-1. The `BlastCloud\Guzzler\Helpers\Extension` extension must be added to an `extensions` object.
-1. A `php` object variable with the name `GuzzlerMacroFile`, pointing to your file that has all your macros.
+1. The `BlastCloud\Hybrid\Helpers\Extension` extension must be added to an `extensions` object.
+1. A `php` object variable with the name `HybridMacroFile`, pointing to your file that has all your macros.
 
 ::: tip Be Aware
 If you add a file via the extension, slashes should not be escaped.
@@ -272,7 +272,7 @@ An example macro file:
 ```php
 <?php
 
-use BlastCloud\Guzzler\Expectation;
+use BlastCloud\Hybrid\Expectation;
 
 Expectation::macro("vendorSetup", function (Expectation $e, $token) {
     return $e->asynchronous()

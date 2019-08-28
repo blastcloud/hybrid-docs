@@ -29,11 +29,11 @@ class SomeTest extends TestCase
     use UsesHybrid;
 ```
 
-This trait wires up a class variable named `hybrid`. Inside that object the necessary history and mock handlers for HttpClient are instantiated and saved. You can completely customize the `Client` object however you like in two different ways.
+This trait wires up a class variable named `hybrid`. Inside that object the necessary history and mock handlers for HttpClient are instantiated and saved. You can customize the `Client` object however you like by passing in any options you would pass to a normal `MockHttpClient` in the `getClient()` method.
 
 ### getClient(array $options = [])
 
-The `getClient` method returns a new instance of the HttpClient `Client` class and adds any options you like to it’s constructor. Adding extra options is **not** required.
+The `getClient` method returns a new instance of the `HttpClient` class and adds any options you like to it’s constructor. Adding extra options is **not** required.
 
 ```php
 $client = $this->hybrid->getClient([
@@ -42,24 +42,30 @@ $client = $this->hybrid->getClient([
 ]);
 ```
 
-### getHandlerStack()
+## Custom Engine Name
 
-If you’d rather create your own `Client` instance, you can instead return the handler stack required to mock responses and add it directly to your client.
-
-```php
-$client = new Client([
-    //... Some configs
-    "handler" => $this->guzzler->getHandlerStack()
-]);
-```
-
-You can also add your own handlers to the stack, if you’d like.
+Hybrid allows you to customize the variable name of the engine, if you prefer to not use "hybrid". To use a custom name, add a constant to the class called `ENGINE_NAME` with the value set to the variable name you'd prefer.
 
 ```php
-$stack = $this->guzzler->getHandlerStack();
-$stack->push(new SomeOtherHandler());
+use BlastCloud\Hybrid\UsesHybrid;
 
-$client = new Client([
-    "handler" => $stack
-]);
+class SomeTest extends TestCase
+{
+    use UsesHybrid;
+    
+    // Here we define what we want the engine name to be.
+    const ENGINE_NAME = 'engine';
+
+    public function testSomething()
+    {
+        // Here, $this->hybrid has been renamed
+        // to $this->engine
+        $this->engine->expects($this->once())
+            ->get('/some/api/url');
+    }
+
+    // ...
+}
 ```
+
+The main benefit of using a custom engine name is to abstract as much code as possible. If you ever decide to move away from Hybrid to another Chassis based library, only the trait name needs to change.

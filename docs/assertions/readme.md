@@ -7,7 +7,7 @@ title: Assertions | Hybrid
 
 While `Expectation`s work great for cases where you don’t care about the order of requests to your client, you may find times where you want to verify either the order of requests in your client’s history, or you may want to make assertions about the entirety of its history. Hybrid provides several convenience assertions for exactly this scenario.
 
-Assertions are also intended to be made after the call to your code under test while `Expectations` are laid out before.
+Assertions are also intended to be made after the call to your code under test while `Hybrid\Expectation`s are laid out before.
 
 ## Available Methods
 
@@ -61,6 +61,10 @@ public function testSomething()
 Assertions can be made specifically against the first item in the client history. The first argument should be a closure that receives an `Expectation` and an optional error message can be passed as the second argument.
 
 ```php
+use BlastCloud\Hybrid\Expectation;
+
+// ...
+
 $this->hybrid->assertFirst(function (Expectation $e) {
     return $e->post("/a-url")
         ->withProtocol(1.1)

@@ -5,7 +5,7 @@ title: Helpers | Hybrid
 
 # Helpers
 
-The following helper methods can be used in addition to `Expectations` and assertions for any custom logic or checks that need to be made.
+The following helper methods can be used in addition to `Expectation`s and assertions for any custom logic or checks that need to be made.
 
 ### getHistory(?int $index, $subIndex = null)
 
@@ -20,12 +20,13 @@ The shape of the history array Hybrid creates is is as follows:
 
 ```php
 $history = [
+    // Hybrid history item structure
     [
-        "request"  => Symfony\Contracts\HttpClient\ResponseInterface object
+        "request"  => array,
         "response" => Symfony\Component\HttpClient\Response\MockResponse object,
         "options"  => array,
-        "errors"   => string or null
-    ],
+        "error"   => null|string 
+    ]
     // ...
 ];
 ```
@@ -36,17 +37,17 @@ Individual indexes and sub-indexes of the history can also be requested directly
 $second = $this->hybrid->getHistory(1);
 /**
 * [
-*   'request'  => object
+*   'request'  => array
 *   'response' => object
 *   'options'  => array
-*   'errors'   => array
+*   'errors'   => null|string
 * ]
 */
 
 $options = $this->hybrid->getHistory(4, 'options');
 /**
 * [
-*   'stream' => true,
+*   'base_uri' => 'http://somewhere.com',
 *   // ...
 * ]
 */
@@ -57,8 +58,8 @@ $options = $this->hybrid->getHistory(4, 'options');
 Retrieve the total number of requests that were made on the client.
 
 ```php
-$this->client->get('/first');
-$this->client->delete('/second');
+$this->client->request('GET', '/first');
+$this->client->request('DELETE', '/second');
 
 echo $this->hybrid->historyCount();
 // 2

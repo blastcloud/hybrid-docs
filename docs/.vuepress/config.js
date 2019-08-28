@@ -14,8 +14,7 @@ module.exports = {
     themeConfig: {
         logo: '/img/hybrid-logo.svg',
         nav: [
-            { text: 'Home', link: '/'},
-            { text: 'Why', link: '/why/'}
+            { text: 'Home', link: '/'}
         ],
         sidebar: [
             {
@@ -35,9 +34,6 @@ module.exports = {
                 title: 'Miscellaneous',
                 collapsable: false,
                 children: [
-                    ['why/', 'Why'],
-                    ['examples/', 'Examples'],
-                    ['roadmap/', 'Road Map'],
                     ['changelog/', 'Changelog']
                 ]
             }
