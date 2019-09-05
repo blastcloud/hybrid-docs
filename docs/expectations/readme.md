@@ -8,11 +8,11 @@ title: Expectations | Hybrid
 Expectations are the main way for you to define what you want Hybrid to search for through your HttpClient history. They are used in two separate ways:
 
 - To define the number of times you expect a match to be made before you test your code.
-- To assert what Hybrid should search for in your client's history after you test your code.
+- To assert what Hybrid should search for in your client's history after your code has run.
 
 ### expects(InvokedRecorder $times, $message = null)
 
-To mimic the chainable syntax of PHPUnit mock objects, you can create expectations with the `expects()` method and PHPUnit’s own **InvokedRecorders**. These are methods like `$this->once()`, `$this->lessThan($int)`, `$this->never()`, and so on. You may also pass an optional message to be used on errors as the second argument.
+To mimic the chainable syntax of PHPUnit mock objects, you can create expectations with the `expects()` method and PHPUnit’s own **InvokedRecorders**. These are methods like `$this->once()`, `$this->lessThan($int)`, `$this->never()`, and so on. You may also pass an optional message to be used on failures as the second argument.
 
 ```php
 public function testExample()
@@ -21,7 +21,7 @@ public function testExample()
 }
 ```
 
-> All methods on expectations are chainable and can lead directly into another method. `$expectation->oneMethod()->anotherMethod()->stillAnother();`
+> All methods on expectations are chainable and can lead directly into the next method. `$expectation->oneMethod()->anotherMethod()->stillAnother();`
 
 ## Available Methods
 
@@ -57,7 +57,7 @@ $this->hybrid->expects($this->once())
     ->endpoint("/some-url", "GET");
 ```
 
-The following convenience verb methods are available to shorten your code. `get`, `post`, `put`, `delete`,  `patch`, `options`.
+The following convenience verb methods are available to shorten your code. `get`, `post`, `patch`, `put`, `delete`, `options`.
 
 ```php
 $this->hybrid->expects($this->any())
@@ -73,7 +73,7 @@ $this->hybrid->expects($this->once())
     ->withBody("some body string");
 ```
 
-By default, this method simply checks that the specified body exists somewhere in the request body. By passing a boolean `true` as the second argument, the method will instead make a strict comparison.
+By default, this method simply checks that the specified body exists somewhere in the request body, but more text may exist. By passing a boolean `true` as the second argument, the method will instead make a strict comparison.
 
 ### withCallback(Closure $callback, string $message = null)
 
@@ -119,12 +119,7 @@ There are several ways you can build out the attributes on a `File` object.
 use BlastCloud\Hybrid\Helpers\File;
 
 // Specify attributes on instantiation.
-$file = new File(
-    $contents = null, 
-    string $filename = null, 
-    string $contentType = null, 
-    array $headers = null
-);
+$file = new File($contents = null, string $filename = null, string $contentType = null, array $headers = null);
 
 // Pass an associative array to a factory.
 $file = File::create([
@@ -178,7 +173,7 @@ $this->hybrid->expects($this->once())
     ]);
 ```
 
-By default, this method simply checks that all specified fields and values exist in the request body, but more may exist. By passing a boolean `true` as the second argument, the method will instead make a strict comparison.
+By default, this method simply checks that all specified fields and values exist in the request body, but more may exist. By passing a boolean `true` as the second argument, the method will instead make a strict comparison and fail if additional fields are found.
 
 ### withFormField(string $key, $value)
 
@@ -187,7 +182,7 @@ You can expect a specific form field in the body of a post. This method works wi
 ```php
 $this->hybrid->expects($this->once())
     ->withFormField('first-name', 'John')
-    ->withFormField('last-name', 'Snow');
+    ->withFormField('house-name', 'Snow');
 ```
 
 ### withHeader(string $key, string|array $value)
@@ -263,7 +258,7 @@ By default, this method checks only that the passed array of values exists somew
 
 ### withOption(string $name, string $value)
 
-You can expect a certain HttpClient Client/Request option by passing a name and value to this method.
+You can expect a certain HttpClient option by passing a name and value to this method.
 
 ```php
 $this->hybrid->expects($this->once())
@@ -293,12 +288,11 @@ $this->hybrid->expects($this->once())
 
 ### withQuery(array $query, $exclusive = false)
 
-You can expect a set of query parameters to appear in the URL of the request by passing an array of key value pairs to match in the URL. The order of query parameters is not considered, and by default any additional parameters included in the URL are ignored.
+You can expect a set of query parameters to appear in the URL of the request by passing an array of key value pairs to match in the URL. The order of query parameters is not considered.
 
 ```php
 // Example URL: http://example.com/api/v2/customers?from=15&to=25&format=xml
 
-// By default the 'format' parameter is ignored
 $this->hybrid->expects($this->once())
     ->withQuery([
         'to' => 25,
@@ -306,7 +300,7 @@ $this->hybrid->expects($this->once())
     ]);
 ```
 
-To enforce only the URL parameters you specify, a boolean `true` can be passed as the second argument.
+By default any additional parameters included in the URL are ignored. To enforce only the URL parameters you specify, a boolean `true` can be passed as the second argument.
 
 ```php
 // Example URL: http://example.com/api/v2/customers?from=15&to=25&format=xml

@@ -2,7 +2,7 @@
     <div class="home">
 
         <p align="center">
-            <img src="/img/hybrid-logo.svg" alt="Hybrid Logo" style="max-width: 600px;" />
+            <img src="/img/Hybrid-logo.svg" alt="Hybrid Logo" style="max-width: 600px;" />
         </p>
 
         <p class="action hero" style="margin-top: 3rem; margin-bottom: 2rem;">

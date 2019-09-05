@@ -5,7 +5,7 @@ title: Helpers | Hybrid
 
 # Helpers
 
-The following helper methods can be used in addition to `Expectation`s and assertions for any custom logic or checks that need to be made.
+The following helper methods can be used in addition to expectations and assertions for any custom logic or checks that need to be made.
 
 ### getHistory(?int $index, $subIndex = null)
 

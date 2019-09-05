@@ -20,7 +20,8 @@ public function testSomething()
         ])
     );
 
-    //... whatever the first request sent to your client is, the response above will be returned.
+    // Whatever the first request sent to your client is, 
+    // the response above will be returned.
 }
 ```
 
@@ -45,7 +46,7 @@ $this->hybrid->queueResponse(new \Exception('Some Message'));
 ::: tip Be Aware
 Whatever order you queue your responses is the order they will be returned from your client, no matter the URI or method of the request. This is a constraint of most mock handlers.
 
-Also, please note that any `\Throwable` object given, such as an exception, will be `throw`n rather than returned from the client.
+Also, please note that any `\Throwable` object given, such as an exception, will be thrown rather than returned from the client.
 :::
 
 ### queueMany($response, int $times = 1)

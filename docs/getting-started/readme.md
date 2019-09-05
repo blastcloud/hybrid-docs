@@ -5,6 +5,10 @@ title: Getting Started | Hybrid
 
 # Getting Started
 
+::: tip Be Aware
+The Symfony\HttpClient component is currently considered an "experimental feature". The underlying library may change in the future before it reaches stable. Please see the [official documentation](https://symfony.com/doc/current/components/http_client.html) for the latest.
+:::
+
 ## Requirements
 
 1. PHP 7.1+
@@ -52,19 +56,30 @@ use BlastCloud\Hybrid\UsesHybrid;
 class SomeTest extends TestCase
 {
     use UsesHybrid;
+
+    public $client;
     
     // Here we define what we want the engine name to be.
     const ENGINE_NAME = 'engine';
 
-    public function testSomething()
+    public function setUp(): void
     {
+        parent::setUp();
+
         // Here, $this->hybrid has been renamed
         // to $this->engine
-        $this->engine->expects($this->once())
-            ->get('/some/api/url');
+        $this->client = $this->engine->getClient([
+            'base_uri' => 'https://some-url.com/api/v2'
+        ]);
     }
 
-    // ...
+    public function testSomething()
+    {
+        $this->engine->expects($this->once())
+            ->get('/some/api/url');
+        
+        // ...
+    }
 }
 ```
 

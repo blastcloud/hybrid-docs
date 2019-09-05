@@ -5,9 +5,9 @@ title: Assertions | Hybrid
 
 # Assertions
 
-While `Expectation`s work great for cases where you don’t care about the order of requests to your client, you may find times where you want to verify either the order of requests in your client’s history, or you may want to make assertions about the entirety of its history. Hybrid provides several convenience assertions for exactly this scenario.
+While [Expectations](/expectations/) work great for cases where you don’t care about the order of requests to your client, you may find times where you want to verify either the order of requests in your client’s history, or you may want to make assertions about the entirety of its history. Hybrid provides several convenience assertions for exactly this scenario.
 
-Assertions are also intended to be made after the call to your code under test while `Hybrid\Expectation`s are laid out before.
+Assertions are also intended to be made after the call to your code under test while Expectations are laid out before.
 
 ## Available Methods
 
@@ -74,7 +74,7 @@ $this->hybrid->assertFirst(function (Expectation $e) {
 
 ### assertNotFirst(Closure $expect, $message = null)
 
-Assert that the first request in history does not meet the expectation defined. The first argument should be a closure that receives an `Expectation` and an optional error message can be passed as the second argument.
+Assert that the first request in history does not meet the given expectation. The first argument should be a closure that receives an `Expectation` and an optional error message can be passed as the second argument.
 
 ```php
 $this->hybrid->assertNotFirst(function ($expect) {
@@ -94,7 +94,7 @@ $this->hybrid->assertLast(function ($expect) {
 
 ### assertNotLast(Closure $expect, $message = null)
 
-Assert that the last request in history does not meet the expectation passed. The first argument should be a closure that receives an `Expectation` and an optional error message can be passed as the second argument.
+Assert that the last request in history does not meet the given expectation. The first argument should be a closure that receives an `Expectation` and an optional error message can be passed as the second argument.
 
 ```php
 $this->hybrid->assertNotLast(function ($expect) {
