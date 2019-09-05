@@ -22,7 +22,7 @@ $this->hybrid->assertAll(function ($e) use ($argument, $another) {
 
 ### Class Overview
 
-Though these methods are called directly on an `Expectation` instance, they exist as separate classes that extend the `Base` filter class and implement the `With` interface. For our example, let's imagine we are working with a web API where we send user information. However, we want to ensure that the request contains only the information of specific users.
+Though these methods are called directly on an `Expectation` instance, they exist as separate classes that extend the `BlastCloud\Chassis\Filters\Base` class and implement the `BlastCloud\Chassis\Interfaces\With` interface. For our example, let's imagine we are working with a web API where we send user information. However, we want to ensure that the request contains only the information of specific users.
 
 Our ideal filter API would be the following method where we can pass in an array of user IDs.
 
@@ -38,8 +38,8 @@ To accomplish this, we can first build out a class like the following:
 
 namespace tests\HybridFilters;
 
-use BlastCloud\Hybrid\Filters\Base;
-use BlastCloud\Hybrid\Interfaces\With;
+use BlastCloud\Chassis\Filters\Base;
+use BlastCloud\Chassis\Interfaces\With;
 
 class WithUser extends Base Implements With
 {
@@ -76,7 +76,7 @@ Every filter requires the following methods:
 | __invoke(): array | Return all history items that pass the filter. |
 | __toString(): string | Return a human readable explanation. Used on failure. |
 
-In addition, you should provide any methods you want to expose to the `Expectation` class, in the case above, the `withUserIn` method. You can provide as many public methods as you like. For example, you could add another method `withUserRoleAddsDirects` to force the filter to also require a list of employees if the user's role is `admin`. Just be aware that all exposed methods should be considered in the single `__invoke` method.
+In addition, you should provide any methods you want to expose to the `Expectation` class, in the case above, the `withUserIn` method. You can provide as many public methods as you like. For example, you could add another method `withUserRoleAddsDirects` to force the filter to also require a list of employees if the user's role is `admin`. Just be aware that all history if filtered through the single `__invoke` method.
 
 ### Naming Convention
 
