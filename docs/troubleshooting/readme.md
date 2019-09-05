@@ -27,7 +27,7 @@ $this->hybrid->expects($this->anything())
 $this->instance->doSomething();
 ```
 
-In the example above, we added only 1 response to the queue before executing our code under test. Then in that code under test we might end up calling that URL twice.
+In the example above, we added only 1 response to the queue before executing our code under test. Then in that code under test we might end up making two requests.
 
 ```php 
 // In your production code

@@ -1,9 +1,9 @@
 ---
 lang: en-US
-title: Changelog | Guzzler
+title: Changelog | Hybrid
 ---
 # Changelog
 
-## [1.0.0] - Released 2019-08-29
+## [1.0.0] - Released 2019-09-05
 
 - Initial Release
