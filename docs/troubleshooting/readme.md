@@ -1,11 +1,11 @@
 ---
 lang: en-US
-title: Troubleshooting | Guzzler
+title: Troubleshooting | Hybrid
 ---
 
 # Troubleshooting
 
-This page lists common issues or message you might run into while building out your tests with Guzzler.
+This page lists common issues or message you might run into while building out your tests with Hybrid.
 
 ## Mock queue is empty
 
@@ -13,13 +13,15 @@ This page lists common issues or message you might run into while building out y
 OutOfBoundsException: Mock queue is empty
 ```
 
-This exception is thrown by Guzzle's mock handler when you have either not provided a response to return from the mock queue, or have run out of responses. When Guzzle returns a response from the mock handler, it removes that response from the queue entirely.
+This exception is thrown by Hybrid's mock handler when you have either not provided a response to return from the mock queue, or have run out of responses. When Hybrid returns a response from the mock handler, it removes that response from the queue entirely.
 
 ```php{4}
 // In your tests
-$this->guzzler->expects($this->anything())
+$this->hybrid->expects($this->anything())
     ->get('/some-url')
-    ->willRespond(new Response(201, [], 'Success'));
+    ->willRespond(new MockResponse('Success', [
+        'http_code' => 201
+    ]));
 
 // Code under test
 $this->instance->doSomething();
@@ -29,22 +31,22 @@ In the example above, we added only 1 response to the queue before executing our
 
 ```php 
 // In your production code
-$response = $this->client->get('/some-url');
+$response = $this->client->request('GET', '/some-url');
 
 // Later in your production code
-$response2 = $this->client->get('/some-url');
+$response2 = $this->client->request('GET', '/some-url');
 ```
 
-## Guzzler's Error Messages
+## Hybrid's Error Messages
 
-In order to be helpful, Guzzler `Expectations` are serialized into a user-friendly list of filters that exist on a failed expectation. For example, the following `Expectation`
+In order to be helpful, Hybrid `Expectations` are serialized into a user-friendly list of filters that exist on a failed expectation. For example, the following `Expectation`
 
 ```php
-$this->guzzler->expects($this->once())
+$this->hybrid->expects($this->once())
     ->withHeader('Auth', 'Some-key')
     ->withQuery(['first' => 'value', 'second' => 'another'])
     ->get('/a-url-for/querying')
-    ->will(new Response(200));
+    ->will(new MockResponse());
 ```
 
 Would be serialized to a string error in the console as

@@ -152,7 +152,7 @@ If you add a namespace via the extension, slashes should not be escaped.
 
 ## Custom Macros
 
-Macros allow you to create convenience methods like ,`synchronous` or `post`, that internally create `Expectation` conditions. For example, the following are the internal implementations of `get` and `post`.
+Macros allow you to create convenience methods like ,`get` or `post`, that internally create `Expectation` conditions. For example, the following are the internal implementations of `get` and `post`.
 
 ```php
 Expectation::macro("get", function (Expectation $e, $url) {   
@@ -197,7 +197,7 @@ Now, you can use the `paginate` method on any `Expectation` instance, and it wil
 ```php
 $this->hybrid->expects($this->once())
     ->paginate("/api/v2/customers", 50, 3)
-    ->withOption("stream", true);
+    ->withHeader("Authorization", $token);
 
 // or
 
@@ -232,7 +232,7 @@ You can register a macro anywhere you like before you need to use it, using `Exp
 
 ```php
 Expectation::macro("vendorSetup", function (Expectation $e, $token) {
-    return $e->asynchronous()
+    return $e->withProtocol(2.0)
         ->withHeader("Authorization", $token);
 });
 
@@ -275,7 +275,7 @@ An example macro file:
 use BlastCloud\Hybrid\Expectation;
 
 Expectation::macro("vendorSetup", function (Expectation $e, $token) {
-    return $e->asynchronous()
+    return $e->withProtocol(2.0)
         ->withHeader("Authorization", $token);
 });
 
