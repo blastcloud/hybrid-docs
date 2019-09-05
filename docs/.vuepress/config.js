@@ -50,7 +50,7 @@ module.exports = {
             updatePopup: true
         }
     },
-    ga: "UA-135533170-1",
+    ga: "UA-135533170-2",
     evergreen: true,
     serviceWorker: {
         updatePopup: true
