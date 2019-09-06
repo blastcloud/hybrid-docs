@@ -7,15 +7,22 @@ navbar: false
 ---
 
 
-Supercharge your app with a testing library specifically for Symfony/HttpClient. Hybrid covers the process of setting up a mock handler, recording history of requests, and provides several convenience methods for creating expectations and assertions on that history.
+Charge up your app or SDK with a testing library specifically for Symfony/HttpClient.
+
+## Installation
+
+```bash
+composer require --dev --prefer-dist blastcloud/hybrid
+```
 
 ## Example Usage
 
 ```php
 <?php
 
-use BlastCloud\Hybrid\UsesHybrid;
-use GuzzleHttp\Client;
+use BlastCloud\Hybrid\{Expectation, UsesHybrid};
+use Symfony\Component\HttpClient\Response\MockResponse;
+use PHPUnit\Framework\TestCase;
 
 class SomeTest extends TestCase
 {
@@ -26,12 +33,12 @@ class SomeTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
+    
         $client = $this->hybrid->getClient([
             /* Any configs for a client */
             "base_uri" => "https://example.com/api"
         ]);
-
+        
         // You can then inject this client object into your code or IOC container.
         $this->classToTest = new ClassToTest($client);
     }
@@ -41,23 +48,23 @@ class SomeTest extends TestCase
         $this->hybrid->expects($this->once())
             ->post("/some-url")
             ->withHeader("X-Authorization", "some-key")
-            ->willRespond(new MockResponse(201));
-
+            ->willRespond(new MockResponse("Some body"));
+    
         $this->classToTest->someMethod();
     }
 
     public function testSomethingWithAssertions()
     {
-        $this->Hybrid->queueResponse(
-            new MockResponse(204),
+        $this->hybrid->queueResponse(
+            new MockResponse(null, ['http_code' => 204]),
             new \Exception("Some message"),
             // any needed responses to return from the client.
         );
-
+    
         $this->classToTest->someMethod();
         // ... Some other number of calls
-
-        $this->Hybrid->assertAll(function ($expect) {
+    
+        $this->hybrid->assertAll(function (Expectation $expect) {
             return $expect->withHeader("Authorization", "some-key");
         });
     }
