@@ -15,6 +15,7 @@ module.exports = {
         logo: '/img/hybrid-logo-no-pump.svg',
         nav: [
             { text: 'Home', link: '/'},
+            { text: 'Why', link: '/why/'},
             {
                 text: 'Ecosystem',
                 items: [
@@ -40,6 +41,7 @@ module.exports = {
                 title: 'Miscellaneous',
                 collapsable: false,
                 children: [
+                    ['why/', 'Why'],
                     ['changelog/', 'Changelog']
                 ]
             }

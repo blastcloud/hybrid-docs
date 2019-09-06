@@ -12,7 +12,7 @@ The Symfony\HttpClient component is currently considered an "experimental featur
 ## Requirements
 
 1. PHP 7.1+
-2. Symfony\HttpClient
+2. Symfony\HttpClient 4.3.1+
 3. PHPUnit 7 or 8
 
 ## Installation
@@ -83,4 +83,4 @@ class SomeTest extends TestCase
 }
 ```
 
-The main benefit of using a custom engine name is to abstract as much code as possible. If you ever decide to move away from Hybrid to another Chassis based library, only the trait name needs to change.
+The main benefit of using a custom engine name is to abstract as much code as possible. Though it's not likely you'll have a conflicting variable named "hybrid", it's a possibility that is covered.

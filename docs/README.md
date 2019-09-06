@@ -7,7 +7,7 @@ navbar: false
 ---
 
 
-Charge up your app or SDK with a testing library specifically for Symfony/HttpClient.
+Charge up your app or SDK with a testing library specifically for Symfony/HttpClient. Hybrid covers the process of setting up a mock handler, recording history of requests, and provides several convenience methods for creating expectations and assertions on that history.
 
 ## Installation
 
