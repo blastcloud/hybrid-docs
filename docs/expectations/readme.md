@@ -27,7 +27,7 @@ public function testExample()
 
 <div class="toc">
     <p>
-        <a href="#endpoint-string-uri-string-verb-verb-string-uri">endpoint, verbs</a><br />
+        <a href="#withendpoint-string-uri-string-verb-verb-string-uri">withEndpoint, verbs</a><br />
         <a href="#withbody-string-body-bool-exclusive-false">withBody</a><br />
         <a href="#withcallback-closure-callback-string-message-null">withCallback</a><br />
         <a href="#withfile-string-fieldname-file-file">withFile</a><br />
@@ -38,7 +38,7 @@ public function testExample()
         <a href="#withformfield-string-key-value">withFormField</a><br />
         <a href="#withheader-string-key-string-array-value">withHeader</a><br />
         <a href="#withheaders-array-headers">withHeaders</a><br />
-         <a href="#withjson-array-json-bool-exclusive-false">withJson</a><br />
+        <a href="#withjson-array-json-bool-exclusive-false">withJson</a><br />
     </p>
     <p>
         <a href="#withoption-string-name-string-value">withOption</a><br />
@@ -48,13 +48,13 @@ public function testExample()
     </p>
 </div>
 
-### endpoint(string $uri, string $verb), {verb}(string $uri)
+### withEndpoint(string $uri, string $verb), {verb}(string $uri)
 
 To specify the endpoint and method used for an expectation, use the `endpoint()` method or any of the convenience endpoint verb methods.
 
 ```php
 $this->hybrid->expects($this->once())
-    ->endpoint("/some-url", "GET");
+    ->withEndpoint("/some-url", "GET");
 ```
 
 The following convenience verb methods are available to shorten your code. `get`, `post`, `patch`, `put`, `delete`, `options`.
