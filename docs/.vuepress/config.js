@@ -51,16 +51,12 @@ module.exports = {
         lastUpdated: 'Last Updated',
         repo: "blastcloud/hybrid",
         serviceWorker: {
-            updatePopup: true,
-            name: "Hybrid",
-            short_name: "Hybrid"
+            updatePopup: true
         }
     },
     ga: "UA-135533170-2",
     evergreen: true,
     serviceWorker: {
-        updatePopup: true,
-        name: "Hybrid",
-        short_name: "Hybrid"
+        updatePopup: true
     }
 };
