@@ -1,5 +1,5 @@
 module.exports = {
-    description: "The official documentation for the Hybrid testing framework.",
+    description: "Supercharge your PHP app or SDK with a declarative testing library specifically for Symfony's HttpClient.",
     head: [
         ['link', {rel:"manifest", href:"/manifest.json"}],
         ['meta', {name: 'twitter:card', content: 'summary_large_image'}],
@@ -11,7 +11,8 @@ module.exports = {
         ['meta', {name: 'og:title', content: 'Charge up your app or SDK'}],
         ['meta', {name: 'twitter:image', content: 'https://hybrid.guzzler.dev/img/500x500-full.png'}],
         ['meta', {name: 'twitter:image:alt', content: 'The Hybrid logo'}],
-        ['link', {rel: 'apple-touch-icon', sizes: '500x500', href:'https://hybrid.guzzler.dev/img/500x500.png'}]
+        ['link', {rel: 'apple-touch-icon', sizes: '500x500', href:'https://hybrid.guzzler.dev/img/500x500.png'}],
+        ['meta', {name: 'keywords', content:'hybrid, symfony, HttpClient, test, testing, php, phpunit, declarative'}]
     ],
     themeConfig: {
         logo: '/img/hybrid-logo-no-pump.svg',
