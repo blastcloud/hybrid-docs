@@ -32,19 +32,22 @@ public function testExample()
         <a href="#withcallback-closure-callback-string-message-null">withCallback</a><br />
         <a href="#withfile-string-fieldname-file-file">withFile</a><br />
         <a href="#withfiles-array-files-bool-exclusive-false">withFiles</a><br />
+        <a href="#withform-array-formfields-bool-exclusive-false">withForm</a><br />
     </p>
     <p>
-        <a href="#withform-array-formfields-bool-exclusive-false">withForm</a><br />
         <a href="#withformfield-string-key-value">withFormField</a><br />
         <a href="#withheader-string-key-string-array-value">withHeader</a><br />
         <a href="#withheaders-array-headers">withHeaders</a><br />
         <a href="#withjson-array-json-bool-exclusive-false">withJson</a><br />
-    </p>
-    <p>
         <a href="#withoption-string-name-string-value">withOption</a><br />
         <a href="#withoptions-array-options">withOptions</a><br />
+    </p>
+    <p>
         <a href="#withprotocol-protocol">withProtocol</a><br />
         <a href="#withquery-array-query-exclusive-false">withQuery</a><br />
+        <a href="#withquerykey-string-key">withQueryKey</a><br />
+        <a href="#withquerykeys-array-keys">withQueryKeys</a><br />
+        <a href="#withoutquery">withoutQuery<a/><br />
     </p>
 </div>
 
@@ -311,4 +314,33 @@ $this->hybrid->expects($this->once())
         'to' => 25,
         'from' => 15
     ], true);
+```
+
+### withQueryKey(string $key)
+
+You can specify just the key for a query item, if you either don't care about the value or there is none. For example, ElasticSearch sometimes has a query key but no following value.
+
+```php
+// Example URL: http://some-elasticsearch-url?_delete_by_query
+
+$this->guzzler->expects($this->once())
+    ->withQueryKey('_delete_by_query');
+```
+
+### withQueryKeys(array $keys)
+
+You can specify just the keys you want to appear in the query, but not specifically check any values they may have.
+
+```php
+$this->guzzler->expects($this->once())
+    ->withQueryKeys(['first', 'second']);
+```
+
+### withoutQuery()
+
+If you'd like to ensure no query string is provided in the request at all, this method can be used.
+
+```php
+$this->guzzler->expects($this->once())
+    ->withoutQuery();
 ```
