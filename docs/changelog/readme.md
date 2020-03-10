@@ -5,6 +5,11 @@ title: Changelog | Hybrid
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.1.1] - 2020-03-09
+- Update to support PHPUnit 9
+- Drop support for PHPUnit below 8.2
+- Drop support for PHP 7.1
+
 ## [1.0.3] - 2019-12-03
 - Security dependency update. PR provided by Github helpbot
 
